@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Circles</title>
+    <link rel="stylesheet" href="circles.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.10.2/paper-full.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.1/howler.min.js"></script>
+    <!-- Define inlined PaperScript associate it with myCanvas -->
+    <script type="text/paperscript" canvas="myCanvas">
+    var circles = [];
+
+    var keyData = {
+      a: {
+        color: "purple",
+        sound: new Howl({
+          src: ["sounds/bubbles.mp3"]
+        })
+      },
+      s: {
+        color: "green",
+        sound: new Howl({
+          src: ["sounds/clay.mp3"]
+        })
+      },
+      d: {
+        color: "yellow",
+        sound: new Howl({
+          src: ["sounds/confetti.mp3"]
+        })
+      }
+    }
+
+    function onKeyDown(event) {
+      if (keyData[event.key]) {
+        var maxPoint = new Point(view.size.width, view.size.height);
+        var randomPoint = Point.random();
+        var point = maxPoint * randomPoint;
+        var newCircle = new Path.Circle(point, 500);
+        newCircle.fillColor = keyData[event.key].color;
+        keyData[event.key].sound.play();
+        circles.push(newCircle);
+      }
+    }
+
+    function onFrame(event) {
+      for (var i = 0; i < circles.length; i++) {
+        circles[i].fillColor.hue += 1;
+        circles[i].scale(.9);
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <canvas id="myCanvas" resize></canvas>
+  </body>
+</html>
